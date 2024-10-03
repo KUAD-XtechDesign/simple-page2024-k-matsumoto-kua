@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>じゃんけんゲーム</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            border: none;
+            padding: 20px 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #result {
+            margin-top: 30px;
+            font-size: 1.5em;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+    </style>
+</head>
+<body>
+    <h1>じゃんけんゲーム</h1>
+    <div class="button-container">
+        <button onclick="play('グー')">グー</button>
+        <button onclick="play('チョキ')">チョキ</button>
+        <button onclick="play('パー')">パー</button>
+    </div>
+    <p id="result"></p>
+
+    <script>
+        function play(userChoice) {
+            const choices = ['グー', 'チョキ', 'パー'];
+            const aiChoice = choices[Math.floor(Math.random() * choices.length)];
+            let result = '';
+
+            if (userChoice === aiChoice) {
+                result = '引き分け！';
+            } else if (
+                (userChoice === 'グー' && aiChoice === 'チョキ') ||
+                (userChoice === 'チョキ' && aiChoice === 'パー') ||
+                (userChoice === 'パー' && aiChoice === 'グー')
+            ) {
+                result = '勝ち！';
+            } else {
+                result = '負け！';
+            }
+
+            const resultElement = document.getElementById('result');
+            resultElement.innerText = `あなたの選択: ${userChoice} - AIの選択: ${aiChoice}. ${result}`;
+            
+            // アニメーションをリセットしてから開始
+            resultElement.style.opacity = 0; // フェードアウト
+            resultElement.style.animation = 'none'; // アニメーションをリセット
+            resultElement.offsetHeight; // 再フローを強制
+            resultElement.style.animation = 'fadeIn 0.5s ease-in forwards'; // フェードイン
+
+            // ボタンにバウンスアニメーションを適用
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.style.animation = 'bounce 0.3s ease';
+            });
+        }
+    </script>
+</body>
+</html>
